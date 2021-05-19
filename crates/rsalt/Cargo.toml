@@ -1,0 +1,23 @@
+[package]
+name = "rsalt"
+version = "0.1.0"
+edition = "2018"
+authors = ["Jihyun Yu <yjh0502@gmail.com>"]
+
+[lib]
+crate-type = ["dylib"]
+
+[dependencies]
+rustler = "0.21"
+rustler_sys = "2"
+sodalite = "0.4.0"
+
+[profile.dev]
+opt-level = 3
+debug = false
+lto = true
+debug-assertions = true
+codegen-units = 1
+panic = 'unwind'
+incremental = false
+overflow-checks = false

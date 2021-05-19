@@ -1,0 +1,9 @@
+{application, rsalt, [
+    {description, "nacl binding over rust"},
+    {vsn, git},
+    {registered, []},
+    {applications, [kernel, stdlib]},
+    {maintainers, ["Jihyun Yu"]},
+    {licenses, ["APACHE"]},
+    {links, [{"GitHub", "https://github.com/yjh0502/rsalt"}]}
+]}.

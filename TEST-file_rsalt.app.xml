@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="1" failures="0" errors="0" skipped="0" time="0.007" name="file &quot;rsalt.app&quot;">
+  <testcase time="0.003" name="rsalt:0 roundtrip_test (module 'rsalt')">
+    <system-out>
+    </system-out>
+  </testcase>
+</testsuite>
