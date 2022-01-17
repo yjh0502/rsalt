@@ -1,3 +1,5 @@
 target
 _build
 priv
+erl_crash.dump
+TEST*

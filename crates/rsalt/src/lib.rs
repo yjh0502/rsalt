@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate rustler;
-
 use sodalite::*;
 
 use rustler::types::{Binary, OwnedBinary};
@@ -8,21 +5,14 @@ use rustler::Error::BadArg;
 use rustler::{Encoder, Env, NifResult, Term};
 
 mod atoms {
-    rustler_atoms! {
-        atom ok;
-        atom t = "true";
-        atom f = "false";
+    rustler::atoms! {
+        ok,
+        t = "true",
+        f = "false",
     }
 }
 
-rustler_export_nifs!(
-    "rsalt",
-    [
-        ("nif_secretbox", 3, secretbox),
-        ("nif_secretbox_open", 3, secretbox_open)
-    ],
-    None
-);
+rustler::init!("rsalt", [nif_secretbox, nif_secretbox_open]);
 
 const SECRETBOX_ZEROBYTES: usize = 32;
 const SECRETBOX_BOXZEROBYTES: usize = 16;
@@ -45,14 +35,16 @@ fn to_fixed_buf<const N: usize>(buf: &[u8]) -> [u8; N] {
     out
 }
 
-fn secretbox<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
-    if args.len() != 3 {
-        return Err(BadArg);
-    }
-
-    let data = Binary::from_term(args[0])?;
-    let nonce = Binary::from_term(args[1])?;
-    let secret_key = Binary::from_term(args[2])?;
+#[rustler::nif]
+fn nif_secretbox<'a>(
+    env: Env<'a>,
+    data: Term<'a>,
+    nonce: Term<'a>,
+    secret_key: Term<'a>,
+) -> NifResult<Term<'a>> {
+    let data = Binary::from_term(data)?;
+    let nonce = Binary::from_term(nonce)?;
+    let secret_key = Binary::from_term(secret_key)?;
 
     if nonce.len() != SECRETBOX_NONCE_LEN || secret_key.len() != SECRETBOX_KEY_LEN {
         return Err(BadArg);
@@ -73,14 +65,16 @@ fn secretbox<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
     Ok((atoms::ok(), Binary::from_owned(bin, env).to_term(env)).encode(env))
 }
 
-fn secretbox_open<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
-    if args.len() != 3 {
-        return Err(BadArg);
-    }
-
-    let data = Binary::from_term(args[0])?;
-    let nonce = Binary::from_term(args[1])?;
-    let secret_key = Binary::from_term(args[2])?;
+#[rustler::nif]
+fn nif_secretbox_open<'a>(
+    env: Env<'a>,
+    data: Term<'a>,
+    nonce: Term<'a>,
+    secret_key: Term<'a>,
+) -> NifResult<Term<'a>> {
+    let data = Binary::from_term(data)?;
+    let nonce = Binary::from_term(nonce)?;
+    let secret_key = Binary::from_term(secret_key)?;
 
     if nonce.len() != SECRETBOX_NONCE_LEN || secret_key.len() != SECRETBOX_KEY_LEN {
         return Err(BadArg);
